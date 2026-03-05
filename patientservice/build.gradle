@@ -1,0 +1,75 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '4.0.3'
+	id 'io.spring.dependency-management' version '1.1.7'
+	id 'com.google.protobuf' version '0.9.4'
+}
+
+group = 'harsh'
+version = '0.0.1-SNAPSHOT'
+description = 'this is patient microservice'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+ext {
+	grpcVersion = '1.69.0'
+	protobufVersion = '4.29.1'
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.2'
+	// ✅ gRPC
+	implementation "io.grpc:grpc-netty-shaded:${grpcVersion}"
+	implementation "io.grpc:grpc-protobuf:${grpcVersion}"
+	implementation "io.grpc:grpc-stub:${grpcVersion}"
+
+	implementation "com.google.protobuf:protobuf-java:${protobufVersion}"
+
+	implementation 'net.devh:grpc-spring-boot-starter:3.1.0.RELEASE'
+
+	// Necessary for Java 9+
+	compileOnly 'org.apache.tomcat:annotations-api:6.0.53'
+
+	// ✅ Kafka
+	implementation 'org.springframework.boot:spring-boot-starter-kafka'
+	runtimeOnly 'org.postgresql:postgresql'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+}
+
+protobuf {
+	protoc {
+		artifact = "com.google.protobuf:protoc:3.25.5"
+	}
+	plugins {
+		grpc {
+			artifact = "io.grpc:protoc-gen-grpc-java:1.68.1"
+		}
+	}
+	generateProtoTasks {
+		all().each { task ->
+			task.plugins {
+				grpc {}
+			}
+		}
+	}
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

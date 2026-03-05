@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: patientservice
+  jackson:
+    time-zone: UTC
+  kafka:
+#    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.ByteArraySerializer
+
+  datasource:
+    url: jdbc:postgresql://localhost:5000/patient_db
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+
+server:
+  port: 1212
+
+logging:
+  level:
+    org.springframework.kafka: DEBUG
+    org.apache.kafka.clients.producer: DEBUG
+    org.apache.kafka: INFO
