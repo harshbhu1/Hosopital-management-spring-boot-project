@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: billingservice
+
+server:
+  port: 1213
+
+grpc:
+  server:
+    port: 4678
